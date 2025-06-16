@@ -1,0 +1,17 @@
+{
+  "name": "tdd-workflow-tests",
+  "version": "1.0.0",
+  "description": "Repository for AI-generated TDD tests",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0"
+  },
+  "jest": {
+    "testMatch": ["**/tests/**/*.test.js"],
+    "collectCoverageFrom": ["src/**/*.js"]
+  }
+}
