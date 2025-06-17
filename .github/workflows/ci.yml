@@ -1,0 +1,37 @@
+name: TDD Test Validation
+
+on:
+  workflow_dispatch:
+    inputs:
+      test_type:
+        description: 'Type of test to run'
+        required: true
+        default: 'tdd-validation'
+      workflow_id:
+        description: 'Workflow ID that generated the tests'
+        required: false
+
+  push:
+    paths:
+      - 'tests/generated/**'
+
+jobs:
+  validate-tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Install dependencies
+      run: npm install
+      
+    - name: Run generated tests
+      run: npm test
+      
+    - name: Test validation complete
+      run: echo "✅ TDD tests validated for workflow ${{ github.event.inputs.workflow_id }}"
