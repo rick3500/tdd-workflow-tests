@@ -49,3 +49,34 @@ describe('User receives confirmation email after registration', () => {
     expect(true).toBe(true);
   });
 });
+
+describe('Registration confirmation email', () => {
+  test('sends confirmation email after successful registration [REQ-123]', async () => {
+    // Arrange
+    const userData = makeValidUserData();
+    const sendEmailMock = jest.fn();
+    registerUser.setEmailSender(sendEmailMock);
+
+    // Act
+    await registerUser(userData);
+
+    // Assert
+    expect(sendEmailMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        to: userData.email,
+        subject: expect.stringContaining('Confirmation'),
+      })
+    );
+  });
+
+  test('does not send email if registration fails [REQ-124]', async () => {
+    // Arrange
+    const invalidData = { ...makeValidUserData(), email: '' };
+    const sendEmailMock = jest.fn();
+    registerUser.setEmailSender(sendEmailMock);
+
+    // Act & Assert
+    await expect(registerUser(invalidData)).rejects.toThrow();
+    expect(sendEmailMock).not.toHaveBeenCalled();
+  });
+});
